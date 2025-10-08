@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Wallpaper — Onslaught</title>
+		<link
+			rel="icon"
+			type="image/x-icon"
+			href="https://onslaught2342.github.io/favicon.ico"
+		/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				height: 100%;
+				width: 100%;
+				background: #000;
+				overflow: hidden;
+			}
+
+			video {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+				pointer-events: none;
+				z-index: 1;
+			}
+
+			.tap-zone {
+				position: fixed;
+				top: 0;
+				width: 50%;
+				height: 100%;
+				z-index: 10;
+			}
+
+			#leftZone {
+				left: 0;
+			}
+
+			#rightZone {
+				right: 0;
+			}
+
+			.hint {
+				position: fixed;
+				bottom: 20px;
+				left: 50%;
+				transform: translateX(-50%);
+				padding: 6px 12px;
+				border-radius: 999px;
+				background: rgba(0, 0, 0, 0.4);
+				color: #8fffd4;
+				font-family: monospace;
+				font-size: 13px;
+				opacity: 0.8;
+				z-index: 20;
+				border: 1px solid rgba(255, 255, 255, 0.05);
+				user-select: none;
+			}
+		</style>
+	</head>
+	<body>
+		<video id="video" muted playsinline loop></video>
+
+		<div id="leftZone" class="tap-zone"></div>
+		<div id="rightZone" class="tap-zone"></div>
+
+		<div class="hint">← / → to change Wallpaper</div>
+
+		<script>
+			const videos = [
+				"https://cdn2.onslaught2342.qzz.io/assets/wallpapers/vegeta-ultra-ego.mp4",
+				"https://cdn2.onslaught2342.qzz.io/assets/wallpapers/goku-ultra-instinct.mp4",
+				"https://moccasin-hollow-fox-767.mypinata.cloud/ipfs/bafybeice2q5noet5kivjdtcxsz64vkzbtthd5u4sk3bpx7bwnwtzdnhttq",
+				"https://cdn2.onslaught2342.qzz.io/assets/wallpapers/random-landscape.mp4",
+				"https://cdn2.onslaught2342.qzz.io/assets/wallpapers/car-random-wallpaper.mp4",
+			];
+
+			let current = 0;
+			const video = document.getElementById("video");
+
+			function loadVideo(index) {
+				current = (index + videos.length) % videos.length;
+				video.src = videos[current];
+				video.play().catch(() => {});
+			}
+
+			loadVideo(current);
+
+			window.addEventListener("keydown", (e) => {
+				if (e.key === "ArrowRight") loadVideo(current + 1);
+				if (e.key === "ArrowLeft") loadVideo(current - 1);
+				if (e.code === "Space") video.paused ? video.play() : video.pause();
+			});
+
+			document.getElementById("leftZone").addEventListener("click", () => {
+				loadVideo(current - 1);
+			});
+			document.getElementById("rightZone").addEventListener("click", () => {
+				loadVideo(current + 1);
+			});
+
+			document.body.addEventListener(
+				"click",
+				() => {
+					video.play();
+				},
+				{ once: true }
+			);
+		</script>
+	</body>
+</html>
